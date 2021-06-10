@@ -4,24 +4,28 @@ from shop import settings
 from mainapp.models import Product, ProductCategory
 from basketapp.models import Basket
 
+
 def get_basket(user):
     if user.is_authenticated:
         return Basket.objects.filter(user=user)
     else:
         return []
 
+
 def get_hot_product():
     products_list = Product.objects.all()
     # print(products_list)
     return random.sample(list(products_list), 1)[0]
 
+
 def get_same_products(hot_product):
     same_products = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
     return same_products
 
+
 def main(request):
     products = Product.objects.all()[:4]
-    basket =get_basket(request.user)
+    basket = get_basket(request.user)
     content = {'title': 'Магазин', 'products': products, 'basket': basket}
     return render(request, 'mainapp/index.html', content)
 
@@ -29,7 +33,7 @@ def main(request):
 def products(request, pk=None):
     title = 'Каталог'
     links_menu = ProductCategory.objects.all()
-    basket =get_basket(request.user)
+    basket = get_basket(request.user)
 
     if pk is not None:
         if pk == 0:
@@ -79,7 +83,7 @@ def product(request, pk):
 def contact(request):
     title = 'о нас'
     visit_date = datetime.datetime.now()
-    basket =get_basket(request.user)
+    basket = get_basket(request.user)
 
     locations = [
         {
