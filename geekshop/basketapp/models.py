@@ -24,7 +24,6 @@ class Basket(models.Model):
         items = Basket.objects.filter(user=self.user)
         return sum(list(map(lambda x: x.quantity, items)))
 
-
     @property
     def total_cost(self):
         items = Basket.objects.filter(user=self.user)

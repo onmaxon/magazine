@@ -15,6 +15,13 @@
             контакты
         </a>
     </li>
+    {% if user.is_superuser %}
+    <li>
+        <a href="{% url 'admin:users' %}">
+            админка
+        </a>
+    </li>
+    {% endif %}
     {% if user.is_authenticated %}
         <li>
             <a href="{% url 'auth:edit' %}">
