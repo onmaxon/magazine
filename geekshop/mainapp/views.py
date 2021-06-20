@@ -6,6 +6,7 @@ from shop import settings
 from mainapp.models import Product, ProductCategory
 from basketapp.models import Basket
 
+
 def get_basket(user):
     if user.is_authenticated:
         return Basket.objects.filter(user=user)
@@ -30,7 +31,10 @@ def main(request):
     products = Product.objects.filter(category__is_active=True)[:4]
 
     basket = get_basket(request.user)
-    content = {'title': 'Магазин', 'products': products, 'basket': basket}
+    content = {'title': 'Магазин',
+               'products': products,
+               # 'basket': basket
+               }
     return render(request, 'mainapp/index.html', content)
 
 # Пагинотор
@@ -110,7 +114,7 @@ def products(request, pk=None, page=1):
             'links_menu': links_menu,
             'category': category,
             'products': product_paginator,
-            'basket': basket,
+            # 'basket': basket,
 
         }
 
@@ -124,7 +128,7 @@ def products(request, pk=None, page=1):
         'links_menu': links_menu,
         'hot_product': hot_product,
         'same_products': same_products,
-        'basket': basket,
+        # 'basket': basket,
     }
     return render(request, 'mainapp/products.html', content)
 
@@ -138,7 +142,7 @@ def product(request, pk):
         'title': title,
         'links_menu': links_menu,
         'product': product,
-        'basket': get_basket(request.user),
+        # 'basket': get_basket(request.user),
     }
     return render(request, 'mainapp/product.html', content)
 
@@ -168,5 +172,5 @@ def contact(request):
             'address': 'Близко к океану',
         },
     ]
-    content = {'title': title, 'visit_date':visit_date, 'locations': locations, 'basket': basket}
+    content = {'title': title, 'visit_date': visit_date, 'locations': locations, 'basket': basket}
     return render(request, 'mainapp/contact.html', content)

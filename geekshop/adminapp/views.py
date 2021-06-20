@@ -140,10 +140,20 @@ class ProductCategoryDeleteView(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-# class ProductDetailView(DetailView):
-#     model = Product
-#     template_name = 'adminapp/product_read.html'
-#     fields = '__all__'
+class ProductListView(ListView):
+    model = Product
+    template_name = 'adminapp/products.html'
+    fields = '__all__'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(category_id=self.kwargs['pk'])
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['category'] = get_object_or_404(category=category)
+        return context
 
 
 @user_passes_test(lambda u: u.is_superuser)

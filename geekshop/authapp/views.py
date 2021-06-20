@@ -1,19 +1,22 @@
+from django.core.mail import send_mail
 from django.shortcuts import render, HttpResponseRedirect
-from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUser
 from django.contrib import auth
 from django.urls import reverse
+from django.conf import settings
+import logging
 
 from authapp.forms import ShopUserEditForm
 
 
 def login(request):
     title = 'вход'
-    
+
     login_form = ShopUserLoginForm(data=request.POST or None)
-    
+
     next = request.GET['next'] if 'next' in request.GET.keys() else ''
     #print('next', next)
-    
+
     if request.method == 'POST' and login_form.is_valid():
         username = request.POST['username']
         password = request.POST['password']
@@ -34,28 +37,30 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('main'))
-    
+
 
 def register(request):
     title = 'регистрация'
-    
+
     if request.method == 'POST':
         register_form = ShopUserRegisterForm(request.POST, request.FILES)
-    
+
         if register_form.is_valid():
-            register_form.save()
+            user = register_form.save()
+            if send_verify_link(user):
+                logging.debug('Sent ok')
+            else:
+                logging.error('Send error')
             return HttpResponseRedirect(reverse('auth:login'))
     else:
         register_form = ShopUserRegisterForm()
-    
-    content = {'title': title, 'register_form': register_form}
-    
-    return render(request, 'authapp/register.html', content)
-    
-    
+        content = {'title': title, 'register_form': register_form}
+        return render(request, 'authapp/register.html', content)
+
+
 def edit(request):
     title = 'редактирование'
-    
+
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
         if edit_form.is_valid():
@@ -63,7 +68,28 @@ def edit(request):
             return HttpResponseRedirect(reverse('auth:edit'))
     else:
         edit_form = ShopUserEditForm(instance=request.user)
-    
+
     content = {'title': title, 'edit_form': edit_form}
-    
+
     return render(request, 'authapp/edit.html', content)
+
+
+def send_verify_link(user):
+    verify_link = reverse('auth:verify', args=[user.email, user.activation_key])
+    subject = 'Accout verify'
+    message = f'Your link for account {user.username} activation: {settings.DOMAIN_NAME}{verify_link}'
+    return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+
+def verify(request, email, key):
+    user = ShopUser.objects.filter(email=email).first()
+    # print()
+    # print(user.is_activation_key_expired())
+    # user = ShopUser.objects.get(email=email)
+    if user and user.activation_key == key and not user.is_activation_key_expired():
+        user.is_active = True
+        user.activation_key = ''
+        user.activation_key_created = None
+        user.save()
+        auth.login(request, user)
+    return render(request, 'authapp/verify.html')
