@@ -8,7 +8,7 @@ from datetime import timedelta
 
 class ShopUser(AbstractUser):
     avatar = models.ImageField(upload_to='users_avatars', blank=True, verbose_name='аватарка')
-    age = models.PositiveIntegerField(verbose_name='возраст')
+    age = models.PositiveIntegerField(verbose_name='возраст', default=18)
 
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -22,11 +22,10 @@ class ShopUser(AbstractUser):
 class ShopUserProfile(models.Model):
     MALE = 'M'
     FEMALE = 'W'
-
-    GENDER_CHOISES = (
+    GENDER_CHOISES = {
         (MALE, 'М'),
         (FEMALE, 'Ж'),
-    )
+    }
 
     user = models.OneToOneField(ShopUser, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
     tagline = models.CharField(verbose_name='тэги', max_length=128, blank=True)
