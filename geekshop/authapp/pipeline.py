@@ -10,14 +10,14 @@ def save_user_profile(backend, user, response, *args, **kwargs):
     if backend != 'vk-oauth2':
         return
 
-    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about&access_token={response['access_token']}"
+    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about,photo_200&access_token={response['access_token']}"
     vk_response = requests.get(api_url)
 
     if vk_response.status_code != 200:
         return
 
     vk_data = vk_response.json()['response'][0]
-
+    
     if vk_data['sex']:
         if vk_data['sex'] == 2:
             user.shopuserprofile.gender = ShopUserProfile.MALE
@@ -35,4 +35,8 @@ def save_user_profile(backend, user, response, *args, **kwargs):
             raise AuthForbidden('social_core.backends.vk.VKOAuth2')
         user.age = age
 
+    if vk_data['photo_200']:
+        print(vk_data['photo_200'])
+        # avatar =
     user.save()
+
