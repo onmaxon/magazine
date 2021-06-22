@@ -7,11 +7,11 @@ from mainapp.models import Product, ProductCategory
 from basketapp.models import Basket
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    else:
-        return []
+# def get_basket(user):
+#     if user.is_authenticated:
+#         return Basket.objects.filter(user=user)
+#     else:
+#         return []
 
 
 def get_hot_product():
@@ -30,7 +30,7 @@ def main(request):
     # products = Product.objects.all()[:4]
     products = Product.objects.filter(category__is_active=True)[:4]
 
-    basket = get_basket(request.user)
+    # basket = get_basket(request.user)
     content = {'title': 'Магазин',
                'products': products,
                # 'basket': basket
@@ -91,7 +91,7 @@ def products(request, pk=None, page=1):
     title = 'Каталог'
     # links_menu = ProductCategory.objects.all()
     links_menu = ProductCategory.objects.filter(is_active=True)
-    basket = get_basket(request.user)
+    # basket = get_basket(request.user)
 
     if pk is not None:
         if pk == 0:
@@ -150,7 +150,7 @@ def product(request, pk):
 def contact(request):
     title = 'о нас'
     visit_date = datetime.datetime.now()
-    basket = get_basket(request.user)
+    # basket = get_basket(request.user)
 
     locations = [
         {
@@ -172,5 +172,9 @@ def contact(request):
             'address': 'Близко к океану',
         },
     ]
-    content = {'title': title, 'visit_date': visit_date, 'locations': locations, 'basket': basket}
+    content = {'title': title,
+               'visit_date': visit_date,
+               'locations': locations,
+               # 'basket': basket
+               }
     return render(request, 'mainapp/contact.html', content)

@@ -4,9 +4,9 @@ from mainapp.models import ProductCategory, Product
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from authapp.forms import ShopUserRegisterForm
-from adminapp.forms import ShopUserAdminEditForm
-from adminapp.forms import ProductCategoryEditForm
+# from authapp.forms import ShopUserRegisterForm
+# from adminapp.forms import ShopUserAdminEditForm
+# from adminapp.forms import ProductCategoryEditForm
 from adminapp.forms import ProductEditForm
 
 
@@ -140,20 +140,25 @@ class ProductCategoryDeleteView(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ProductListView(ListView):
-    model = Product
-    template_name = 'adminapp/products.html'
-    fields = '__all__'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(category_id=self.kwargs['pk'])
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # context['category'] = get_object_or_404(category=category)
-        return context
+# class ProductListView(ListView):
+#     model = Product
+#     template_name = 'adminapp/products.html'
+#     fields = '__all__'
+#
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         queryset = queryset.filter(category_id=self.kwargs['pk'])
+#         return queryset
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['category'] = get_object_or_404(ProductCategory, pk=self.kwargs['pk'])
+#         return context
+#
+#
+# class ProductDetailView(DetailView):
+#     model = Product
+#     template_name = 'adminapp/product_read.html'
 
 
 @user_passes_test(lambda u: u.is_superuser)

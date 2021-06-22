@@ -41,6 +41,6 @@ urlpatterns = [
     path('categories/delete/<int:pk>/', adminapp.ProductCategoryDeleteView.as_view(), name='category_delete'),
 
     # PRODUCTS
-    # path('products/read/category/<int:pk>/', adminapp.ProductDetailView.as_view(), name='products'),
-    # path('products/read/<int:pk>/', adminapp.ProductDetailView, name='product_read'),
+    # path('products/read/category/<int:pk>/', adminapp.ProductListView.as_view(), name='products'),
+    # path('products/read/<int:pk>/', adminapp.ProductListView.as_view(), name='product_read'),
 ]
