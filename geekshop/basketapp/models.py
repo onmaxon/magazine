@@ -28,3 +28,4 @@ class Basket(models.Model):
     def total_cost(self):
         items = Basket.objects.filter(user=self.user)
         return sum(list(map(lambda x: x.product_cost, items)))
+

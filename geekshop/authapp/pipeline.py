@@ -36,7 +36,8 @@ def save_user_profile(backend, user, response, *args, **kwargs):
         user.age = age
 
     if vk_data['photo_200']:
-        print(vk_data['photo_200'])
+        user.shopuser.avatar = vk_data['photo_200']
+        # print(vk_data['photo_200'])
         # avatar =
     user.save()
 
