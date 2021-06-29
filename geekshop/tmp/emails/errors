@@ -1,0 +1,36 @@
+Internal Server Error: /auth/verify/test@fintech.ru/e3e015063bf0dbda66437aca44019c19e37afe74/
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 111, in login
+    backend = backend or user.backend
+AttributeError: 'ShopUser' object has no attribute 'backend'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/max/Geek/magazine/geekshop/authapp/views.py", line 94, in verify
+    auth.login(request, user)
+  File "/usr/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 117, in login
+    raise ValueError(
+ValueError: You have multiple authentication backends configured and therefore must provide the `backend` argument or set the `backend` attribute on the user.
+ERROR:django.request:Internal Server Error: /auth/verify/test@fintech.ru/e3e015063bf0dbda66437aca44019c19e37afe74/
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 111, in login
+    backend = backend or user.backend
+AttributeError: 'ShopUser' object has no attribute 'backend'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/max/Geek/magazine/geekshop/authapp/views.py", line 94, in verify
+    auth.login(request, user)
+  File "/usr/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 117, in login
+    raise ValueError(
+ValueError: You have multiple authentication backends configured and therefore must provide the `backend` argument or set the `backend` attribute on the user.
